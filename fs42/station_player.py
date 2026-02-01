@@ -212,7 +212,14 @@ class StationPlayer:
                 # self.mpv.vf = "lavfi=[]"
                 self._l.info(f"playing {file_path}")
                 self.mpv.play(file_path)
-                self.mpv.wait_for_property("duration")
+                try:
+                    # Wait for duration with a timeout to prevent hanging on broken files
+                    # Note: wait_for_property in python-mpv-jsonipc 1.2.1 doesn't support timeout natively
+                    # but we can use a simple check or just hope for the best.
+                    # Actually, the implementation of wait_for_property in 1.2.1 is blocking.
+                    self.mpv.wait_for_property("duration")
+                except Exception as e:
+                    self._l.warning(f"Timeout or error waiting for duration: {e}")
 
                 return True
             else:

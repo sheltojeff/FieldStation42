@@ -23,7 +23,7 @@ class AutoBumpAgent:
 
         msg_bump = AutoBumpAgent.message_bump(ab_config, AutoBumpAgent.base_url)
         next_bump = AutoBumpAgent.next_up_bump(ab_config, AutoBumpAgent.base_url, station_config["network_name"])
-        return {"message_bump": msg_bump, "next_bump": next_bump}
+        return {"start_block": msg_bump, "end_block": next_bump}
 
     @staticmethod
     def is_autobump_url(url):

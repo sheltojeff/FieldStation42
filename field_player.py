@@ -144,9 +144,13 @@ def main_loop(transition_fn, shutdown_queue=None, api_proc=None):
                 f"Starting station {channel_conf['network_name']} at: {week_day} {hour} skipping={skip} "
             )
 
-            player_state = player.play_slot(
-                channel_conf["network_name"], datetime.datetime.now()
-            )
+            try:
+                player_state = player.play_slot(
+                    channel_conf["network_name"], datetime.datetime.now()
+                )
+            except Exception as e:
+                logger.error(f"Error during playback: {e}")
+                player_state = PlayerOutcome(PlayerState.FAILED)
 
         logger.debug(f"Got player outcome:{player_state.status}")
 
